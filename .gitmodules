@@ -1,0 +1,3 @@
+[submodule "pyptrace"]
+	path = pyptrace
+	url = https://github.com/krornus/pyptrace.git
