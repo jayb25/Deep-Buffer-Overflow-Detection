@@ -1,10 +1,10 @@
 import tensorflow as tf
 import numpy as np
-import matplotlib.pyplot as plt
 import os
 from operator import mul
 import math
 import ast
+import time
 
 # SEED = 42
 tf.set_random_seed(0)
@@ -127,8 +127,9 @@ class CNN():
                                     is_training=is_training,
                                     scope=name)
 
-        tfrecords = [os.path.join(tfrecord_dir, f) for f in ['1521816829.2.tf', '1521816845.16.tf', '1521816921.89.tf', '1521817243.39.tf', '1521817539.22.tf', '1521817841.11.tf', '1521818138.95.tf']]# os.listdir(tfrecord_dir)]
-                          
+        tfrecords = [os.path.join(tfrecord_dir, f) for f in os.listdir(tfrecord_dir)]
+        time.sleep(20)  
+
         X, instruction_ids, Y = read_and_decode(tfrecords, batch_size)
 
         # self.X = tf.placeholder(tf.float32, shape=[batch_size, None, 10])

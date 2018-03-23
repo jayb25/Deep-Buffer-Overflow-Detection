@@ -10,7 +10,7 @@ np.random.seed(42)
 #tf.reset_default_graph()
 tf.set_random_seed(0)
 
-os.environ["CUDA_VISIBLE_DEVICES"]="0"
+#os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 
 
@@ -26,10 +26,7 @@ class TrainCNN:
         self.batch_size = batch_size
         self.cnn = CNN(batch_size=batch_size, tfrecord_dir=tfrecord_dir, vocab_path=vocab_path)
         self.merged = tf.summary.merge_all()
-        
-        #self.data_loader = DataLoader(['../data/code_features/', '../data/vulnerable_code_features/'], [0, 1], is_training=True, vocab_file_path='/tmp/instruction_vocab', data_save_file_path='/tmp/code_data', test_size=0.33)
-
-
+       
     def train(self, print_steps=1, display_data=100, save_steps=10000):
         config = tf.ConfigProto()
         config.gpu_options.allow_growth=True
