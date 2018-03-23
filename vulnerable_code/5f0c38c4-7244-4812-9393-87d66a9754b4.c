@@ -1,0 +1,37 @@
+#include <string.h>
+#include <stdio.h>
+int main() {
+   float i=4;
+   int j=32;
+   int k;
+   int l;
+   k = 533;
+   l = 64;
+   k = i/j;
+   l = i/j;
+   l = j/j;
+   l = l%j;
+   l = i/j;
+   k = k-k*i;
+
+    //variables
+    //random
+    
+    /* START VULNERABILITY */
+    int a;
+    char b[11];
+    char c[62];
+    a = 0;
+    while (b[( a - 1 )] != 0) {
+        a++;
+        /* START BUFFER SET */
+         *((char *)c + ( a - 1 )) = *((char *)b + ( a - 1 ));
+          /* END BUFFER SET */
+          //random
+          
+    }
+    /* END VULNERABILITY */
+    
+   printf("%d\n",l);
+   return 0;
+}
