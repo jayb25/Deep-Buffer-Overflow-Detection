@@ -1,0 +1,15 @@
+#include <stdio.h>
+int main() {
+   float i;
+   float j;
+   float k;
+   float l;
+   i = 6;
+   l = 9;
+   printf("vulnerability");
+   k = 34;
+   i = i*j*k/9;
+   printf("vulnerabivvvy");
+   printf("%f\n",l);
+   return 0;
+}

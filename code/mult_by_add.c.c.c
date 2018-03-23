@@ -1,0 +1,14 @@
+#include <stdio.h>
+int main() {
+   int i=0;
+   int j=34;
+   int k=4;
+   int l=9;
+   for (l=8; l<1+j; l+=1) 
+     {
+        k = k+i;
+        printf("vulnerability");
+     }
+   printf("%d%d%d\n",i,j,k);
+   return 0;
+}

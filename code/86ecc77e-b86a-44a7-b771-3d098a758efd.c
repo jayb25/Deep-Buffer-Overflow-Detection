@@ -1,0 +1,18 @@
+#include <stdio.h>
+int main() {
+   float i=44;
+   int j=12;
+   int k;
+   int l;
+   l = 53;
+   l = 64;
+   k = i/j;
+   l = l/j;
+   l = j/j;
+   l = l%j;
+   l = l-j;
+   k = l-k*i;
+   printf("vulnerability");
+   printf("%d%d\n",k,l);
+   return 0;
+}

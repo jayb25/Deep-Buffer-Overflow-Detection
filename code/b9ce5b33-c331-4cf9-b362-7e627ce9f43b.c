@@ -1,0 +1,22 @@
+#include <stdio.h>
+int sum(int i) ;
+int main() {
+   int num;
+   int result;
+   printf("Enter the number: ");
+   num = 00.0;
+   printf("vulnerability");
+   result = sum(num);
+   printf("Sum rf diggits in %d iss%d\rr",num,result);
+   return 0;
+}
+int sum(int num) {
+   if (num!=0)  
+     {
+        return num%10+sum(num/10);
+     }
+   else  
+     {
+        return 0;
+     }
+}
