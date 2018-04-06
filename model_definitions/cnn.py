@@ -18,7 +18,7 @@ def load_vocab(vocab_path):
     return ivocab
 
 
-def conv2d(input_, output_dim, k_h=5, k_w=5, d_h=2, d_w=2, stddev=0.02, name='conv2d'):
+def conv2d(input_, output_dim, k_h=5, k_w=1, d_h=3, d_w=1, stddev=0.02, name='conv2d'):
     with tf.variable_scope(name, reuse=tf.AUTO_REUSE):
         w = tf.get_variable('w', [k_h, k_w, input_.get_shape()[-1], output_dim],
             initializer=tf.truncated_normal_initializer(stddev=stddev))
@@ -46,12 +46,16 @@ def lrelu(x, leak=0.2, name="lrelu"):
     return tf.maximum(x, leak*x)
 
 def cos_relative_positions(X):
-    x_cos_1 = tf.cos(X / 1000000000000000)
-    x_cos_2 = tf.cos(X / 10000000)
-    x_cos_3 = tf.cos(X / 1000)
-    x_cos_4 = tf.cos(X / 10)
-    x_cos_5 = tf.cos(X)
-    return tf.concat([x_cos_1, x_cos_2, x_cos_3, x_cos_4, x_cos_5], axis=-1)
+    x_cos_0 = tf.cos(X )
+    x_cos_1 = tf.cos(X / 2)
+    x_cos_2 = tf.cos(X / 4)
+    x_cos_3 = tf.cos(X / 8)
+    x_cos_4 = tf.cos(X / 16)
+    x_cos_5 = tf.cos(X / 32)
+    x_cos_6 = tf.cos(X / 64)
+    x_cos_7 = tf.cos(X / 128)
+    x_cos_8 = tf.cos(X / 256)
+    return tf.concat([x_cos_1, x_cos_2, x_cos_3, x_cos_4, x_cos_5, x_cos_6, x_cos_7, x_cos_8], axis=-1)
 
 
 
@@ -104,9 +108,11 @@ def read_and_decode(tfrecords_filename, batch_size):
 
     X, instruction_ids, Y = tf.train.shuffle_batch([tf.concat(list_vars, axis=-1), instruction_id, label],
                                              batch_size=batch_size,
-                                             capacity=30,
-                                             num_threads=2,
-                                             min_after_dequeue=10)
+                                             capacity=1000,
+                                             num_threads=16,
+                                             min_after_dequeue=2)
+    
+    tf.summary.histogram('All X', X)
     return X, instruction_ids, Y
 
 
@@ -128,7 +134,6 @@ class CNN():
                                     scope=name)
 
         tfrecords = [os.path.join(tfrecord_dir, f) for f in os.listdir(tfrecord_dir)]
-        time.sleep(20)  
 
         X, instruction_ids, Y = read_and_decode(tfrecords, batch_size)
 
@@ -148,27 +153,34 @@ class CNN():
         def classifier(x, keep_prob):
 
             print('classifier')
-            h0 = conv2d(x, 64, name='c_h0_conv')
+            h0 = conv2d(x, 128, d_h=5, name='c_h0_conv')
             h0 = batch_norm(h0, name='c_h0_bn')
             h0 = lrelu(h0)
             h0 = tf.nn.dropout(h0, keep_prob=keep_prob)
             print(h0)
-            h1 = conv2d(h0, 128, name='c_h1_conv')
+            h1 = conv2d(h0, 256, d_h=5, name='c_h1_conv')
             h1 = batch_norm(h1, name='c_h1_bn')
             h1 = lrelu(h1)
             h1 = tf.nn.dropout(h1, keep_prob=keep_prob)
             print(h1)
-            h2 = conv2d(h1, 256, name='c_h2_conv')
+            h2 = conv2d(h1, 512, d_h=5, name='c_h2_conv')
             h2 = batch_norm(h2, name='c_h2_bn')
             h2 = lrelu(h2)
             h2 = tf.nn.dropout(h2, keep_prob=keep_prob)
+            print(h2)
+
+            h3 = conv2d(h2, 1024, d_h=5, name='c_h3_conv')
+            h3 = batch_norm(h3, name='c_h3_bn')
+            h3 = lrelu(h3)
+            h3 = tf.nn.dropout(h3, keep_prob=keep_prob)
+            print(h3)
             
             #Average over instructions
-            h2 = tf.reduce_mean(h2, axis=1)
+            h2 = tf.reduce_mean(h3, axis=1)
             print(h2)
             h2 = tf.reshape(h2, [batch_size, -1])
 
-            h3 = linear(h2, 32, 'c_h3_lin')
+            h3 = linear(h2, 128, 'c_h3_lin')
             h3 = batch_norm(h3, name='c_h3_lin_bn')
             h3 = tf.nn.dropout(h3, keep_prob=keep_prob)
             h4 = linear(h3, 2, 'c_h4_lin')
@@ -176,7 +188,7 @@ class CNN():
 
 
         with tf.variable_scope('c_cnn_classifier'):
-            logits = classifier(X, keep_prob=0.3)
+            logits = classifier(X, keep_prob=0.5)
             test_logits = classifier(X, keep_prob=1.0)
 
             self.c_vars = [var for var in tf.trainable_variables() if 'c_' in var.name]
