@@ -1,5 +1,5 @@
-verflow Detection
- Detect existence of buffer overflows using program traces
+
+ Deep-Buffer-Overflow-Detection -- Detects the presence of buffer overflows using program traces
  
  # Requirements
  - Tensorflow 1.6
@@ -7,8 +7,8 @@ verflow Detection
  - sklearn
  
 # Setup
-To repurduce the results you will need 2TB of free disk space.
-When cloning the project be sure to do a recursive clone to get submodule pytrace.
+To reproduce the results you will need 2TB of free disk space.
+When cloning the project be sure to do a recursive clone to git submodule pytrace.
  ``` sh
 git clone --recurse-submodules https://github.com/nmharmon8/Deep-Buffer-Overflow-Detection.git
 ```
