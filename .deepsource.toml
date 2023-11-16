@@ -1,0 +1,53 @@
+version = 1
+
+[[analyzers]]
+name = "python"
+
+  [analyzers.meta]
+  runtime_version = "3.x.x"
+
+[[analyzers]]
+name = "sql"
+
+[[analyzers]]
+name = "scala"
+
+[[analyzers]]
+name = "javascript"
+
+[[analyzers]]
+name = "csharp"
+
+[[analyzers]]
+name = "go"
+
+  [analyzers.meta]
+  import_root = "github.com/jayb25/Deep-Buffer-Overflow-Detection"
+
+[[analyzers]]
+name = "kotlin"
+
+  [analyzers.meta]
+  runtime_version = "1.8"
+  language_version = "1.7"
+
+[[analyzers]]
+name = "ruby"
+
+[[analyzers]]
+name = "secrets"
+
+[[analyzers]]
+name = "php"
+
+[[analyzers]]
+name = "java"
+
+  [analyzers.meta]
+  runtime_version = "11"
+
+[[analyzers]]
+name = "cxx"
+
+[[analyzers]]
+name = "docker"
